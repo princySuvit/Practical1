@@ -12,7 +12,6 @@ const validateLoginInput = require("../../validation/login");
 const validateUploadInput = require("../../validation/upload");
 const User = require("../../models/User");
 
-
 async function mailerfun(emailadd, pass) {
   let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -23,8 +22,8 @@ async function mailerfun(emailadd, pass) {
   });
 
   let info = await transporter.sendMail({
-    from: '"Princy" <princygajera121@gmail.com>', // sender address
-    to: emailadd, // list of receivers
+    from: '"Princy" <princygajera121@gmail.com>',
+    to: emailadd,
     subject: "Hello ✔",
     text: `Hello ${emailadd} your auto generated password is ${pass}`,
   });
@@ -42,7 +41,7 @@ function generatePassword() {
   return password;
 }
 
-
+//handle excel
 const uploadXLSX = async (req, res, next) => {
   try {
     var path = req.file.path;
@@ -59,6 +58,7 @@ const uploadXLSX = async (req, res, next) => {
     }
 
     var totalError = [];
+    var Dataset = [];
     for (let person of jsonData) {
       const { errors, isValid } = validateUploadInput(person);
       if (!isValid) {
@@ -81,35 +81,35 @@ const uploadXLSX = async (req, res, next) => {
         }
         else {
           let pass = generatePassword();
-          person.password = pass;
           const newUser = new User({
             name: person.name,
             email: person.email,
-            password: person.password
+            role: "user",
+            password: pass
           });
-
-          mailerfun(person.email, pass).catch(console.error);
           bcrypt.genSalt(10, (err, salt) => {
             +-bcrypt.hash(newUser.password, salt, (err, hash) => {
               if (err)
                 throw err;
               newUser.password = hash;
-              newUser
-                .save()
-                .catch(err => console.log(err));
             });
           });
+          Dataset.push(newUser);
+          mailerfun(person.email, pass).catch(console.error);
         }
       }
     };
-    console.log(totalError);
+    let response;
+    console.log(Dataset);
+    response = await User.insertMany(Dataset, { ordered: true });
+
+    console.log("Error", totalError);
     res.json(jsonData);
   }
   catch (err) {
     return res.status(500).json({ success: false, message: err.message });
   }
 };
-
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -124,7 +124,6 @@ router.post("/upload", upload.single("xlsx"), uploadXLSX);
 
 
 router.post("/register", (req, res) => {
-  // Form validation
   const { errors, isValid } = validateRegisterInput(req.body);
   // Check validation
   if (!isValid) {
@@ -138,6 +137,7 @@ router.post("/register", (req, res) => {
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
+        role: req.body.role,
         password: req.body.password
       });
       mailerfun(req.body.email, "");
@@ -167,13 +167,11 @@ router.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  // Find user by email
   User.findOne({ email }).then(user => {
-    // Check if user exists
+
     if (!user) {
       return res.status(404).json({ emailnotfound: "Email not found" });
     }
-    // Check password
     bcrypt.compare(password, user.password).then(isMatch => {
       if (isMatch) {
         // Create JWT Payload
@@ -195,8 +193,6 @@ router.post("/login", (req, res) => {
             });
           }
         );
-        //if (email == "admin@gmail.com", password == "admin@123") { }
-
       }
       else {
         return res
@@ -206,6 +202,5 @@ router.post("/login", (req, res) => {
     });
   });
 });
-
 
 module.exports = router;

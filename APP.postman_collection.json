@@ -16,22 +16,27 @@
 					"urlencoded": [
 						{
 							"key": "name",
-							"value": "pihoo",
+							"value": "Princy",
 							"type": "text"
 						},
 						{
 							"key": "email",
-							"value": "pihoo@gmail.com",
+							"value": "princy@gmail.com",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "test123",
+							"value": "123456",
 							"type": "text"
 						},
 						{
 							"key": "password2",
-							"value": "test123",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "user",
 							"type": "text"
 						}
 					]
@@ -105,19 +110,19 @@
 						{
 							"key": "xlsx",
 							"type": "file",
-							"src": "/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/App1/routes/api/test.xlsx"
-						},
-						{
-							"key": "xlsx",
-							"type": "file",
-							"src": "/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/App1/routes/api/test1.xlsx",
+							"src": "/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/Task1/routes/api/test1.xlsx",
 							"disabled": true
 						},
 						{
 							"key": "xlsx",
 							"type": "file",
-							"src": "/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/App1/routes/api/test2.xlsx",
+							"src": "/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/Task1/routes/api/test2.xlsx",
 							"disabled": true
+						},
+						{
+							"key": "xlsx",
+							"type": "file",
+							"src": "/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/Task1/routes/api/test3.xlsx"
 						}
 					]
 				},
@@ -132,6 +137,123 @@
 						"api",
 						"users",
 						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "category",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "categoryName",
+							"value": "laptop",
+							"type": "text"
+						},
+						{
+							"key": "parentId",
+							"value": "63e338960f98664adf0242ce",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/categories/category",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"categories",
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "product",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "catagoryId",
+							"value": "63e338b10f98664adf0242d0",
+							"type": "text"
+						},
+						{
+							"key": "parentId",
+							"value": "63e338b10f98664adf0242d0",
+							"type": "text"
+						},
+						{
+							"key": "productName",
+							"value": "vivo",
+							"type": "text"
+						},
+						{
+							"key": "files",
+							"type": "file",
+							"src": [
+								"/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/p-1/uploads/1675673040053.jpg",
+								"/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/p-1/uploads/1675673040054.jpg",
+								"/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/p-1/uploads/1675673040056.jpg",
+								"/C:/Users/Princy/OneDrive/Desktop/Practice/manageUsers/p-1/uploads/1675673114215.jpg"
+							]
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/products/product",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"products",
+						"product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getProduct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"category\":[\"63e338b10f98664adf0242d0\",\"63e338960f98664adf0242ce\"],\r\n    \"pageNo\":0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/getProducts/getProduct",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"getProducts",
+						"getProduct"
 					]
 				}
 			},

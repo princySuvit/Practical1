@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-// Create Schema
+
 const UserSchema = new Schema({
   name: {
     type: String,
@@ -14,9 +14,15 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  role: {
+    type: String,
+    enum: ['admin', 'user', 'vendor'],
+    required: true
+  },
   date: {
     type: Date,
     default: Date.now
   }
 });
+
 module.exports = User = mongoose.model("users", UserSchema);
